@@ -120,7 +120,7 @@ class _ValentineHomeState extends State<ValentineHome>
 
           return Stack(
             children: [
-              // Drawing area (fills screen)
+              // Drawing area is bigger since before it was too small
               GestureDetector(
                 onPanStart: (d) => _addStamp(d.localPosition),
                 onPanUpdate: (d) => _addStamp(d.localPosition),
@@ -136,7 +136,7 @@ class _ValentineHomeState extends State<ValentineHome>
                 ),
               ),
 
-              // Balloons overlay
+              // Balloons!!
               ...balloons.map((b) {
                 final fall =
                     (t + (b.speed * (DateTime.now().millisecond / 1000)))
@@ -156,7 +156,7 @@ class _ValentineHomeState extends State<ValentineHome>
                 );
               }),
 
-              // TOP controls (makes room for drawing below)
+              
               SafeArea(
                 child: Padding(
                   padding: const EdgeInsets.all(12),
@@ -209,7 +209,7 @@ class _TopControls extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          // Emoji choice buttons at the TOP (segmented vibe)
+          // Emoji at top
           Row(
             children: [
               Expanded(
@@ -233,7 +233,7 @@ class _TopControls extends StatelessWidget {
           ),
           const SizedBox(height: 10),
 
-          // Pulse slider (still top, compact)
+          // Pulse slider
           Row(
             children: [
               const Icon(Icons.favorite, size: 18),
@@ -319,7 +319,7 @@ class CupidCanvasPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    // Background radial gradient
+    // Background gradient
     final bgPaint = Paint()
       ..shader = RadialGradient(
         center: Alignment.center,
