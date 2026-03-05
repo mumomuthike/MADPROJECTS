@@ -1,55 +1,55 @@
 import 'package:flutter/material.dart';
 
-void main() => runApp(const MyApp());
+void main() => runApp(const Appthing());
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class Appthing extends StatelessWidget {
+  const Appthing({super.key});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Enhanced Counter',
       theme: ThemeData(primarySwatch: Colors.blue),
-      home: const CounterWidget(),
+      home: const CountieWidg(),
     );
   }
 }
 
-class CounterWidget extends StatefulWidget {
-  const CounterWidget({super.key});
+class CountieWidg extends StatefulWidget {
+  const CountieWidg({super.key});
 
   @override
-  State<CounterWidget> createState() => _CounterWidgetState();
+  State<CountieWidg> createState() => _CountieState();
 }
 
-class _CounterWidgetState extends State<CounterWidget> {
-  int _counter = 0;
-  int _incrementValue = 1;
-  final int _maxLimit = 100;
+class _CountieState extends State<CountieWidg> {
+  int NumbieCount = 0;
+  int BumpieStep = 1;
+  final int MaxieCap = 100;
 
-  final List<int> _history = [];
-  final TextEditingController _incController = TextEditingController(text: "1");
+  final List<int> PastieVals = [];
+  final TextEditingController StepieBox = TextEditingController(text: "1");
 
-  // ✅ Spec Task 4 hint: logic goes in style via getter
-  Color get counterColor {
-    if (_counter == 0) return Colors.red;
-    if (_counter > 50) return Colors.green;
+  // Using the hint professor henry kindly gave us for color!
+  Color get ColieMood {
+    if (NumbieCount == 0) return Colors.red;
+    if (NumbieCount > 50) return Colors.green;
     return Colors.black;
   }
 
-  void _showMaxMessage() {
+  void MaxieWarn() {
     ScaffoldMessenger.of(
       context,
     ).showSnackBar(const SnackBar(content: Text("Maximum limit reached!")));
   }
 
-  void _checkSuccessTarget() {
-    if (_counter == 50 || _counter == 100) {
+  void GoalieCheck() {
+    if (NumbieCount == 50 || NumbieCount == 100) {
       showDialog(
         context: context,
         builder: (context) => AlertDialog(
           title: const Text("🎉 Congratulations!"),
-          content: Text("You reached $_counter!"),
+          content: Text("You reached $NumbieCount!"),
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
@@ -61,59 +61,61 @@ class _CounterWidgetState extends State<CounterWidget> {
     }
   }
 
-  // ✅ History saved ONLY on increment/decrement (strict spec)
-  void _increment() {
-    final next = _counter + _incrementValue;
+  // History saving only for increment and decrement (found on stack overflow if it matters)
+  void UpieTap() {
+    final NxtieVal = NumbieCount + BumpieStep;
 
-    if (next > _maxLimit) {
-      _showMaxMessage();
+    if (NxtieVal > MaxieCap) {
+      MaxieWarn();
       return;
     }
 
     setState(() {
-      _history.add(_counter); // save previous value
-      _counter = next;
+      PastieVals.add(NumbieCount);
+      NumbieCount = NxtieVal;
     });
 
-    _checkSuccessTarget();
+    GoalieCheck();
   }
 
-  void _decrement() {
-    final next = _counter - _incrementValue;
-    if (next < 0) return; // limit of 0
+  void DownieTap() {
+    final NxtieVal = NumbieCount - BumpieStep;
+    if (NxtieVal < 0) return;
 
     setState(() {
-      _history.add(_counter); // save previous value
-      _counter = next;
-    });
-  }
-
-  // ✅ Reset does NOT add to history (strict spec)
-  void _reset() {
-    setState(() {
-      _counter = 0;
+      // saving the  previous value
+      PastieVals.add(NumbieCount);
+      NumbieCount = NxtieVal;
     });
   }
 
-  // ✅ Undo uses history (history only comes from inc/dec)
-  void _undo() {
-    if (_history.isEmpty) return;
+  // Resetting doesnt count as history
+  void ZeroieZap() {
     setState(() {
-      _counter = _history.removeLast();
+      NumbieCount = 0;
     });
   }
 
-  void _updateIncrementValue(String value) {
-    final parsed = int.tryParse(value);
-    if (parsed == null || parsed <= 0) return; // validate number
+  // For undo to work, its using the history
+  void BackieFix() {
+    if (PastieVals.isEmpty) return;
     setState(() {
-      _incrementValue = parsed;
+      NumbieCount = PastieVals.removeLast();
+    });
+  }
+
+  void StepieSet(String value) {
+    final NewieStep = int.tryParse(value);
+    if (NewieStep == null || NewieStep <= 0) return;
+
+    setState(() {
+      BumpieStep = NewieStep;
     });
   }
 
   @override
   void dispose() {
-    _incController.dispose();
+    StepieBox.dispose();
     super.dispose();
   }
 
@@ -127,7 +129,7 @@ class _CounterWidgetState extends State<CounterWidget> {
           children: [
             const SizedBox(height: 18),
 
-            /// Counter display (color changes per spec)
+            //Displaying counter
             Center(
               child: Container(
                 padding: const EdgeInsets.symmetric(
@@ -136,24 +138,24 @@ class _CounterWidgetState extends State<CounterWidget> {
                 ),
                 color: Colors.blue.shade100,
                 child: Text(
-                  '$_counter',
-                  style: TextStyle(fontSize: 50.0, color: counterColor),
+                  '$NumbieCount',
+                  style: TextStyle(fontSize: 50.0, color: ColieMood),
                 ),
               ),
             ),
 
             const SizedBox(height: 14),
 
-            /// Slider (still controls counter, but does NOT affect history)
+            //The slider
             Slider(
               min: 0,
-              max: _maxLimit.toDouble(),
-              value: _counter.toDouble(),
+              max: MaxieCap.toDouble(),
+              value: NumbieCount.toDouble(),
               onChanged: (double value) {
                 setState(() {
-                  _counter = value.toInt();
+                  NumbieCount = value.toInt();
                 });
-                _checkSuccessTarget();
+                GoalieCheck();
               },
               activeColor: Colors.blue,
               inactiveColor: Colors.red,
@@ -161,51 +163,54 @@ class _CounterWidgetState extends State<CounterWidget> {
 
             const SizedBox(height: 10),
 
-            /// Custom increment input (validated as a number)
+            //Increment is customized
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: TextField(
-                controller: _incController,
+                controller: StepieBox,
                 keyboardType: TextInputType.number,
                 decoration: InputDecoration(
                   labelText: "Custom Increment Value (e.g. 2, 5)",
                   border: const OutlineInputBorder(),
-                  helperText: "Current increment: +$_incrementValue",
+                  helperText: "Current increment: +$BumpieStep",
                 ),
-                onChanged: _updateIncrementValue,
+                onChanged: StepieSet,
               ),
             ),
 
             const SizedBox(height: 12),
 
-            /// Buttons
+            //The buttons
             Wrap(
               spacing: 10,
               runSpacing: 10,
               alignment: WrapAlignment.center,
               children: [
                 ElevatedButton(
-                  onPressed: _increment,
+                  onPressed: UpieTap,
                   child: const Text("Increment"),
                 ),
                 ElevatedButton(
-                  onPressed: _decrement,
+                  onPressed: DownieTap,
                   child: const Text("Decrement"),
                 ),
-                ElevatedButton(onPressed: _reset, child: const Text("Reset")),
-                ElevatedButton(onPressed: _undo, child: const Text("Undo")),
+                ElevatedButton(
+                  onPressed: ZeroieZap,
+                  child: const Text("Reset"),
+                ),
+                ElevatedButton(onPressed: BackieFix, child: const Text("Undo")),
               ],
             ),
 
             const SizedBox(height: 18),
 
-            /// History list (previous values only from inc/dec)
+            //History
             const Text(
               "History (previous values from Increment/Decrement):",
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
 
-            if (_history.isEmpty)
+            if (PastieVals.isEmpty)
               const Padding(
                 padding: EdgeInsets.all(12.0),
                 child: Text("No history yet — use Increment or Decrement."),
@@ -214,9 +219,9 @@ class _CounterWidgetState extends State<CounterWidget> {
               ListView.builder(
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
-                itemCount: _history.length,
+                itemCount: PastieVals.length,
                 itemBuilder: (context, index) {
-                  final value = _history[index];
+                  final value = PastieVals[index];
                   return ListTile(
                     leading: const Icon(Icons.history),
                     title: Text("Value: $value"),
